@@ -141,14 +141,14 @@ def download_video_sync(url: str, job_id: str):
         job['error'] = str(e)
 
 
-@app.get("/yt", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def home():
     """Serve the main HTML page"""
     html_path = Path(__file__).parent / "templates" / "index.html"
     return HTMLResponse(content=html_path.read_text())
 
 
-@app.post("/yt/api/download", response_model=DownloadResponse)
+@app.post("/api/download", response_model=DownloadResponse)
 async def start_download(request: DownloadRequest, background_tasks: BackgroundTasks):
     """
     Start a download job for a YouTube video.
@@ -186,7 +186,7 @@ async def start_download(request: DownloadRequest, background_tasks: BackgroundT
     )
 
 
-@app.get("/yt/api/status/{job_id}", response_model=JobStatus)
+@app.get("/api/status/{job_id}", response_model=JobStatus)
 async def get_status(job_id: str):
     """Get the status of a download job"""
     if job_id not in jobs:
@@ -204,7 +204,7 @@ async def get_status(job_id: str):
     )
 
 
-@app.delete("/yt/api/cleanup/{job_id}")
+@app.delete("/api/cleanup/{job_id}")
 async def cleanup_job(job_id: str):
     """Clean up files for a job"""
     if job_id in jobs:
